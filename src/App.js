@@ -9,6 +9,7 @@ function App() {
 	const [formData, setFormData] = useState({ prompt: '' });
 	const [isLoading, setIsLoading] = useState(false);
 
+	// On initial page load, grab the data from localStorage
 	useEffect(() => {
 		const localData = JSON.parse(localStorage.getItem('responses') || '[]');
 		setResponses(localData);
@@ -16,6 +17,11 @@ function App() {
 
 	// Needed to provide a workaround in order to save the responses to localStorage without resetting them on refresh|re-visit
 	useEffect(() => {
+		// Save current responses to localStorage
+		const saveResponses = () => {
+			localStorage.setItem('responses', JSON.stringify(responses));
+		};
+
 		if (responses.length > 0) {
 			saveResponses();
 		}
@@ -46,11 +52,6 @@ function App() {
 		setResponses([openAIResponseObj, ...responses]);
 		setIsLoading(false);
 		return;
-	};
-
-	// Save current responses to localStorage
-	const saveResponses = () => {
-		localStorage.setItem('responses', JSON.stringify(responses));
 	};
 
 	// Clear the responses from localStorage
